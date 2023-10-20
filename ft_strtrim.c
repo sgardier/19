@@ -6,7 +6,7 @@
 /*   By: sgardier <sgardier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 16:32:40 by sgardier          #+#    #+#             */
-/*   Updated: 2023/10/20 20:47:04 by sgardier         ###   ########.fr       */
+/*   Updated: 2023/10/20 21:00:09 by sgardier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,12 @@ static size_t	ft_after_last_different(char const *str, size_t str_len,
 	return (after);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+static char	*ft_fill_trimmed(char const *s1, size_t trimmed_str_len,
+		size_t begin)
 {
 	char	*trimmed_str;
-	size_t	begin;
-	size_t	after;
-	size_t	trimmed_str_len;
 	size_t	i;
 
-	if (!s1)
-		return (NULL);
-	if(ft_strlen(s1) == 0 || ft_strlen(set) == 0)
-		return ft_strdup(s1);
-	begin = ft_first_different(s1, ft_strlen(s1), set, ft_strlen(set));
-	after = ft_after_last_different(s1, ft_strlen(s1), set, ft_strlen(set));
-	trimmed_str_len = after - begin;
-	if (after == 0)
-		trimmed_str_len = 0;
 	trimmed_str = malloc(sizeof(char) * (trimmed_str_len + 1));
 	if (!trimmed_str)
 		return (NULL);
@@ -97,3 +86,20 @@ char	*ft_strtrim(char const *s1, char const *set)
 	return (trimmed_str);
 }
 
+char	*ft_strtrim(char const *s1, char const *set)
+{
+	size_t	begin;
+	size_t	after;
+	size_t	trimmed_str_len;
+
+	if (!s1)
+		return (NULL);
+	if (ft_strlen(s1) == 0 || ft_strlen(set) == 0)
+		return (ft_strdup(s1));
+	begin = ft_first_different(s1, ft_strlen(s1), set, ft_strlen(set));
+	after = ft_after_last_different(s1, ft_strlen(s1), set, ft_strlen(set));
+	trimmed_str_len = after - begin;
+	if (after == 0)
+		trimmed_str_len = 0;
+	return (ft_fill_trimmed(s1, trimmed_str_len, begin));
+}
